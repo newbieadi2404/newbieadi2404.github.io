@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Aditya Mishra - backend and data pipeline engineer. Experience, projects and skills.">
+<title>Aditya Mishra Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: streaming-app browse screen — fixed top bar, featured hero, horizontally scrolling rows of title cards, detail modal on click. Single deliberate dark look. */
+:root{
+  --bg:#0f0f10;
+  --surface:#1b1b1d;
+  --surface-2:#262628;
+  --fg:#f2f0ee;
+  --muted:#a6a3a0;
+  --accent:#e5242c;
+  --accent-ink:#ffffff;
+  --good:#46d369;
+  --line:rgba(255,255,255,.12);
+  --display:"Bebas Neue",Impact,"Arial Narrow",sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter-l:max(16px, env(safe-area-inset-left,0px), 4vw);
+  --gutter-r:max(16px, env(safe-area-inset-right,0px), 4vw);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+
+/* Top bar */
+.topbar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;align-items:center;gap:24px;
+  padding-block:14px;padding-left:max(16px, env(safe-area-inset-left,0px), 4vw);padding-right:max(16px, env(safe-area-inset-right,0px), 4vw);
+  background:linear-gradient(180deg,rgba(15,15,16,.95),rgba(15,15,16,0));transition:background .3s}
+.topbar.solid{background:var(--bg)}
+.wordmark{font-family:var(--display);font-size:32px;letter-spacing:.04em;color:var(--accent);text-decoration:none;line-height:1}
+.nav{display:flex;gap:18px;flex-wrap:wrap}
+.nav a{text-decoration:none;font-size:14px;color:var(--muted)}
+.nav a:hover{color:var(--fg)}
+.topbar .spacer{flex:1}
+.avatar{width:34px;height:34px;border-radius:4px;background:var(--accent);display:grid;place-items:center;font-family:var(--display);font-size:20px;color:var(--accent-ink)}
+@media (max-width:640px){.nav{display:none}}
+
+/* Hero */
+.hero{position:relative;padding-top:120px;padding-bottom:56px;padding-left:max(16px, env(safe-area-inset-left,0px), 4vw);padding-right:max(16px, env(safe-area-inset-right,0px), 4vw);overflow:hidden;isolation:isolate}
+.hero-art{position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(70% 90% at 85% 20%,rgba(229,36,44,.35),transparent 60%),
+  radial-gradient(50% 60% at 60% 90%,rgba(120,20,30,.4),transparent 70%),
+  var(--bg)}
+.ticker{position:absolute;inset:0;z-index:-1;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.07);line-height:1.9;white-space:pre;overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent 30%,#000 70%);-webkit-mask-image:linear-gradient(90deg,transparent 30%,#000 70%);padding-top:80px;padding-left:40%}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,var(--bg));z-index:-1}
+.kicker{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kicker .tag{background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:16px;letter-spacing:.06em;padding:2px 6px 0;border-radius:2px}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(64px,13vw,168px);line-height:.86;letter-spacing:.01em;margin:14px 0 8px;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:15px;color:var(--muted);margin-bottom:16px}
+.meta .match{color:var(--good);font-weight:700}
+.meta .rating{border:1px solid var(--muted);padding:0 6px;font-size:12px;border-radius:2px}
+.hero p.lede{max-width:56ch;font-size:clamp(16px,2vw,20px);margin:0 0 24px;color:var(--fg)}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:4px;padding:11px 26px;font:600 17px var(--body);text-decoration:none;cursor:pointer}
+.btn.primary{background:var(--fg);color:var(--bg)}
+.btn.primary:hover{background:#d9d6d3}
+.btn.ghost{background:rgba(110,110,112,.6);color:var(--fg)}
+.btn.ghost:hover{background:rgba(110,110,112,.4)}
+.btn svg{width:20px;height:20px;fill:currentColor}
+
+/* Rows */
+main{display:grid;gap:44px;padding-bottom:60px}
+.row h2{font:700 clamp(18px,2.2vw,22px) var(--body);margin:0 0 12px;padding-left:max(16px, env(safe-area-inset-left,0px), 4vw);padding-right:max(16px, env(safe-area-inset-right,0px), 4vw);display:flex;align-items:baseline;gap:12px}
+.row h2 small{font:500 13px var(--body);color:var(--muted)}
+.rail-wrap{position:relative}
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-block:8px 18px;
+  padding-left:max(16px, env(safe-area-inset-left,0px), 4vw);padding-right:max(16px, env(safe-area-inset-right,0px), 4vw);scroll-padding-left:max(16px, 4vw)}
+.rail::-webkit-scrollbar{display:none}
+.arrow{position:absolute;top:8px;bottom:18px;width:max(16px,4vw);border:0;background:rgba(15,15,16,.6);color:var(--fg);font-size:34px;cursor:pointer;opacity:0;transition:opacity .2s;z-index:2}
+.arrow.l{left:0}.arrow.r{right:0}
+.rail-wrap:hover .arrow,.arrow:focus-visible{opacity:1}
+@media (hover:none){.arrow{display:none}}
+
+/* Title card */
+.card{flex:0 0 clamp(240px,26vw,330px);scroll-snap-align:start;background:var(--surface);border:0;border-radius:4px;overflow:hidden;color:var(--fg);text-align:left;padding:0;cursor:pointer;font:inherit;
+  transition:transform .25s ease, box-shadow .25s ease;display:flex;flex-direction:column}
+.card:hover,.card:focus-visible{transform:scale(1.04);box-shadow:0 14px 30px rgba(0,0,0,.6);z-index:1}
+.poster{aspect-ratio:16/9;max-width:100%;position:relative;display:flex;align-items:flex-end;padding:12px 14px;overflow:hidden}
+.poster .t{font-family:var(--display);font-size:clamp(26px,2.6vw,34px);line-height:.92;letter-spacing:.02em;text-shadow:0 2px 12px rgba(0,0,0,.5);position:relative}
+.poster .badge{position:absolute;top:10px;left:12px;font-family:var(--display);font-size:14px;letter-spacing:.08em;background:var(--accent);color:var(--accent-ink);padding:2px 6px 0;border-radius:2px}
+.poster .glyph{position:absolute;right:-6px;top:-10px;font-family:var(--mono);font-size:64px;font-weight:600;opacity:.16;line-height:1}
+.info{padding:12px 14px 14px;display:grid;gap:6px;min-width:0}
+.info .sub{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px}
+.info .sub .m{color:var(--good);font-weight:700}
+.info p{margin:0;font-size:14px;color:#d8d5d2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;color:var(--muted)}
+.chip+.chip::before{content:"•";margin-right:6px;color:#5a5856}
+
+/* Stat cards ("Top numbers") */
+.stat{flex:0 0 clamp(230px,22vw,290px);scroll-snap-align:start;display:flex;align-items:flex-end;gap:2px;min-height:170px;position:relative}
+.stat .num{font-family:var(--display);font-size:clamp(78px,8vw,104px);line-height:.8;color:var(--bg);-webkit-text-stroke:2px #8a8784;letter-spacing:-.01em;flex:0 0 auto}
+.stat .box{background:var(--surface);border-radius:4px;padding:12px 14px;margin-left:-14px;align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;min-width:0;flex:1}
+.stat .box b{font-size:15px}
+.stat .box span{font-size:13px;color:var(--muted)}
+
+/* Skill shelf */
+.skill{flex:0 0 clamp(220px,22vw,280px);scroll-snap-align:start;background:var(--surface);border-radius:4px;padding:16px;display:grid;gap:10px;align-content:start}
+.skill h3{margin:0;font-family:var(--display);font-size:28px;letter-spacing:.03em;font-weight:400;color:var(--fg)}
+.skill ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.skill li{font-size:13px;background:var(--surface-2);padding:4px 9px;border-radius:3px}
+
+/* Contact */
+.contact{padding-left:max(16px, env(safe-area-inset-left,0px), 4vw);padding-right:max(16px, env(safe-area-inset-right,0px), 4vw)}
+.contact-inner{background:linear-gradient(120deg,#2a0d0f,var(--surface) 60%);border-radius:6px;padding:32px clamp(18px,4vw,48px);display:grid;gap:18px}
+.contact h2{font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,64px);line-height:.9;margin:0;letter-spacing:.02em}
+.contact p{margin:0;max-width:60ch;color:#d8d5d2}
+footer{padding-block:28px 40px;padding-left:max(16px, env(safe-area-inset-left,0px), 4vw);padding-right:max(16px, env(safe-area-inset-right,0px), 4vw);color:#6f6c69;font-size:13px}
+
+/* Modal */
+dialog{border:0;padding:0;background:var(--surface);color:var(--fg);border-radius:8px;width:min(860px,calc(100vw - 24px));max-height:calc(100dvh - 40px);overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.72)}
+.m-hero{aspect-ratio:16/7;max-width:100%;position:relative;display:flex;align-items:flex-end;padding:24px clamp(18px,4vw,40px)}
+.m-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,var(--surface))}
+.m-hero h3{position:relative;z-index:1;margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,7vw,72px);line-height:.88;letter-spacing:.02em;text-wrap:balance}
+.m-close{position:absolute;top:12px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:var(--bg);color:var(--fg);font-size:22px;cursor:pointer}
+.m-body{padding:4px clamp(18px,4vw,40px) 32px;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:24px}
+@media (max-width:640px){.m-body{grid-template-columns:1fr}}
+.m-body ul{margin:0;padding-left:18px;display:grid;gap:8px}
+.m-body li{font-size:15px}
+.m-side{font-size:14px;color:var(--muted);display:grid;gap:10px;align-content:start}
+.m-side b{color:#cfccc9;font-weight:500}
+.m-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:15px;color:var(--muted);grid-column:1/-1}
+.m-meta .m{color:var(--good);font-weight:700}
+.m-link{display:inline-flex;align-items:center;gap:8px;color:var(--fg);font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <a class="wordmark" href="#top" aria-label="Aditya Mishra, home">ADITYA</a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#numbers">Top numbers</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <span class="spacer"></span>
+  <span class="avatar" aria-hidden="true">A</span>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-art"></div>
+  <div class="ticker" aria-hidden="true" id="ticker"></div>
+  <div class="kicker"><span class="tag">A</span> Backend · Data Pipelines</div>
+  <h1>Aditya Mishra</h1>
+  <div class="meta">
+    <span class="match">98% match</span>
+    <span>2026</span>
+    <span class="rating">B.TECH</span>
+    <span>Mumbai, India</span>
+    <span>Python · Java · AWS · SQL</span>
+  </div>
+  <p class="lede">Software developer at Morningstar. I build backend systems and data pipelines that turn raw SEC filings into clean, validated fund data, and I like making security-heavy systems that hold up.</p>
+  <div class="actions">
+    <a class="btn primary" href="#projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>Watch projects</a>
+    <button class="btn ghost" type="button" data-open="morningstar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>More info</button>
+  </div>
+</section>
+
+<main>
+  <section class="row" id="experience" aria-labelledby="h-exp">
+    <h2 id="h-exp">Now streaming: Experience <small>2 titles</small></h2>
+    <div class="rail-wrap"><div class="rail" data-rail="experience"></div></div>
+  </section>
+
+  <section class="row" id="projects" aria-labelledby="h-proj">
+    <h2 id="h-proj">Top picks: Projects <small>Secure systems and data</small></h2>
+    <div class="rail-wrap"><div class="rail" data-rail="projects"></div></div>
+  </section>
+
+  <section class="row" id="numbers" aria-labelledby="h-num">
+    <h2 id="h-num">Top numbers this season <small>Measured results</small></h2>
+    <div class="rail-wrap"><div class="rail" id="stats"></div></div>
+  </section>
+
+  <section class="row" id="skills" aria-labelledby="h-skill">
+    <h2 id="h-skill">Because you're hiring backend engineers <small>Skills</small></h2>
+    <div class="rail-wrap"><div class="rail" id="skillrail"></div></div>
+  </section>
+
+  <section class="row" id="more" aria-labelledby="h-more">
+    <h2 id="h-more">Education, leadership and certifications</h2>
+    <div class="rail-wrap"><div class="rail" data-rail="more"></div></div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="h-contact">
+    <div class="contact-inner">
+      <h2 id="h-contact">Still watching? Let's talk.</h2>
+      <p>Open to backend and data engineering roles. The fastest way to reach me is LinkedIn, and my code is on GitHub.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://www.linkedin.com/in/aditya-mishra-405670251/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn ghost" href="https://github.com/newbieadi2404" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Aditya Mishra · B.Tech Computer Engineering (Minor: Data Science), RAIT · Mumbai</footer>
+
+<dialog id="modal" aria-labelledby="m-title">
+  <button class="m-close" type="button" id="m-close" aria-label="Close">×</button>
+  <div class="m-hero" id="m-hero"><h3 id="m-title"></h3></div>
+  <div class="m-body">
+    <div class="m-meta" id="m-meta"></div>
+    <ul id="m-points"></ul>
+    <div class="m-side" id="m-side"></div>
+  </div>
+</dialog>
+
+<script>
+const GRAD = {
+  red:"linear-gradient(135deg,#7a0d14 0%,#e5242c 55%,#ff7a45 100%)",
+  ink:"linear-gradient(135deg,#0d1b2a 0%,#1f4068 60%,#3a7ca5 100%)",
+  plum:"linear-gradient(135deg,#2b0b3f 0%,#6a1b9a 55%,#d1495b 100%)",
+  teal:"linear-gradient(135deg,#032b2b 0%,#0b6e6e 55%,#41c7a8 100%)",
+  amber:"linear-gradient(135deg,#3a1c00 0%,#a35a00 55%,#f2b134 100%)",
+  slate:"linear-gradient(135deg,#1c1c22 0%,#3d3d4a 60%,#7b7b8f 100%)",
+  green:"linear-gradient(135deg,#0d2414 0%,#1e6b3a 60%,#7bc96f 100%)"
+};
+
+const ITEMS = {
+  morningstar:{rail:"experience",title:"Morningstar",badge:"NOW",glyph:"10-K",grad:"red",
+    sub:["Software Developer","Jun 2026 – Present"],match:"Current role",
+    blurb:"Backend and data pipelines that extract, process and validate financial data from SEC filings.",
+    chips:["Python","Vue 3","AWS","SQS"],
+    points:[
+      "Built a Vue 3 + TypeScript app and an Express API from scratch that turns a fund audit setup (22 form types, 43 data points) into one S3 export, which triggers a 6-service SQS pipeline.",
+      "Developed a Python pipeline that converted 24,134 SEC filings to Markdown in 54 minutes with zero failures (4.13 GB staged in S3 in 24 minutes); daily incremental runs take 1–2 minutes.",
+      "Hardened the Dockerized SQS downloader (8 req/s EDGAR rate limit, retry backoff, S3 de-duplication), wrote a 56-test pytest suite (98% coverage on the EDGAR client) and set up Bitbucket Pipelines CI on every pull request.",
+      "Contributed to Vigil AI, delivering historical NAV and distribution data for all 184 funds (31 REITs, 25 BDCs, 128 Form 10/12(g) funds) from 200+ SEC filings and fund websites.",
+      "Replaced paid Firecrawl scraping with a Playwright scraper, tuned LLM prompts and regex for extraction precision, and automated incremental REIT updates on AWS Lambda over rolling 3-month windows.",
+      "Supported Vanguard and private-market fund data workflows: finding source documents, extracting fund metadata and validating structured data for downstream use."
+    ],
+    side:[["Where","Vashi, Navi Mumbai · Hybrid"],["Stack","Python, TypeScript, Vue 3, Express, Java (MyBatis), AWS S3 / SQS / Lambda, PostgreSQL, Docker, pytest, Playwright"]]},
+  humaninitials:{rail:"experience",title:"Human Initials",badge:"2025",glyph:"SQL",grad:"ink",
+    sub:["Data Analyst Intern","Jun – Aug 2025"],match:"Remote · Delhi",
+    blurb:"Crime-pattern analytics over 10,000+ NCRB records, with an LLM automation that cut manual effort 27%.",
+    chips:["Python","SQL","Power BI","LLMs"],
+    points:[
+      "Reduced manual processing effort by 27% with an LLM-powered automation workflow for data extraction and reporting.",
+      "Built an end-to-end Python and SQL pipeline for 10,000+ NCRB records with Pandas validation, enabling spatio-temporal crime analysis.",
+      "Designed optimized SQL queries and data models, and built Power BI dashboards (DAX, geospatial heatmaps) for crime trend detection."
+    ],
+    side:[["Where","Hauz Khas, Delhi · Remote"],["Stack","Python, Pandas, SQL, Power BI, DAX, LLM APIs"]]},
+
+  vault:{rail:"projects",title:"Secure Health Vault",badge:"FEATURED",glyph:"AES",grad:"plum",
+    sub:["Flask · Supabase · JWT"],match:"Healthcare security",
+    blurb:"End-to-end encrypted medical records platform with RBAC, row-level security and tamper-evident audit logs.",
+    chips:["Flask","Supabase","Cryptography"],
+    points:[
+      "Architected an end-to-end encrypted healthcare records platform with JWT REST APIs, deployed on Vercel + Supabase.",
+      "Hybrid encryption with AES-256-GCM and RSA-2048: ephemeral AES keys are wrapped with each recipient's public key.",
+      "Enforced user-level data isolation with role-based access control and Row-Level Security, plus OTP/QR sharing through expiring tokens.",
+      "Hash-chained audit logging and access tracking to detect tampering and unauthorized access.",
+      "Encryption validated with entropy ≈ 7.99, NPCR ≈ 99.6% and lossless decryption."
+    ],
+    side:[["Roles","Admin, Doctor, Patient"],["Stack","Python, Flask, Supabase, PyCryptodome, JWT"]],
+    link:"https://github.com/newbieadi2404/secure-health-vault"},
+  dicom:{rail:"projects",title:"Secure DICOM Transmission",badge:"NEW",glyph:"RSA",grad:"teal",
+    sub:["Flask · React · Cryptography"],match:"Medical imaging",
+    blurb:"Upload → encrypt → transmit → decrypt pipeline for medical images, with signatures to catch tampering.",
+    chips:["Flask","React","RSA-PSS"],
+    points:[
+      "Engineered an end-to-end secure pipeline for medical image transfer: upload → encrypt → transmit → decrypt.",
+      "Hybrid encryption: AES-256-GCM for pixel data, RSA-2048 (OAEP) for key exchange.",
+      "RSA-PSS digital signatures for integrity and tamper detection.",
+      "Secure APIs with JWT authentication and role-based access control, plus nonce-based replay protection.",
+      "Validated against statistical and differential attacks: entropy ≈ 7.99, NPCR ≈ 99.6%, UACI ≈ 35%, near-zero pixel correlation."
+    ],
+    side:[["Stack","Flask, SQLAlchemy, React (Vite), pydicom, NumPy"],["Built","Jan – Feb 2026"]],
+    link:"https://github.com/newbieadi2404/secure-dicom-transmission-system"},
+  safety:{rail:"projects",title:"Public Safety Intelligence",badge:"ML",glyph:"GEO",grad:"amber",
+    sub:["Python · Scikit-learn · GeoPandas"],match:"Risk analytics",
+    blurb:"Risk scoring and hotspot prediction that maps high-risk zones from crime datasets.",
+    chips:["Random Forest","GeoPandas","Folium"],
+    points:[
+      "Developed a data-driven risk analysis system to identify high-risk zones from crime datasets.",
+      "Designed a risk scoring model based on frequency, severity and temporal patterns.",
+      "Trained a Random Forest model for hotspot prediction and pattern detection.",
+      "Mapped regional risk clusters with GeoPandas and Folium to support resource allocation and public safety planning."
+    ],
+    side:[["Stack","Python, Scikit-learn, GeoPandas, Folium, Pandas"]]},
+
+  rait:{rail:"more",title:"RAIT · B.Tech",badge:"2026",glyph:"CGPA",grad:"slate",
+    sub:["Computer Engineering","2022 – 2026"],match:"CGPA 7.70",
+    blurb:"Ramrao Adik Institute of Technology, D. Y. Patil Deemed to be University. Minor in Data Science.",
+    chips:["Navi Mumbai"],
+    points:["B.Tech in Computer Engineering with a Minor in Data Science, CGPA 7.70/10.","Ramrao Adik Institute of Technology, D. Y. Patil Deemed to be University, Navi Mumbai (July 2022 – June 2026)."],
+    side:[["Minor","Data Science"]]},
+  tpc:{rail:"more",title:"TPC-RAIT",badge:"LEAD",glyph:"DB",grad:"green",
+    sub:["Database Co-Head","2023 – 2026"],match:"1,000+ students",
+    blurb:"Ran student placement data pipelines and coordinated between companies and candidates.",
+    chips:["Leadership","Data"],
+    points:["Managed student placement data pipelines and coordinated communication between companies and candidates.","Supported placement operations for 1,000+ students, keeping data tracking accurate and the process efficient."],
+    side:[["Where","Navi Mumbai"]]},
+  certs:{rail:"more",title:"Certifications",badge:"CERT",glyph:"AWS",grad:"ink",
+    sub:["Cloud"],match:"2 credentials",
+    blurb:"AWS Academy Cloud Architecting and Google Cloud Professional Badge Collection.",
+    chips:["AWS","Google Cloud"],
+    points:["AWS Academy: Cloud Architecting","Google Cloud: Professional Badge Collection"],
+    side:[]},
+  sport:{rail:"more",title:"Off the clock",badge:"1ST",glyph:"100M",grad:"red",
+    sub:["Extracurricular"],match:"Gold, U-18 sprint",
+    blurb:"1st place in the 100m sprint (U-18) at the Naval Dockyard Sports Meet, and a 5 km run in 26:41.",
+    chips:["Sprint","Running"],
+    points:["100m Sprint (U-18): 1st place, Naval Dockyard Sports Meet, Mumbai.","5 km fun run completed in 26:41 at IIT Bombay, Powai."],
+    side:[]}
+};
+
+const STATS = [
+  ["24K","SEC filings converted","24,134 in 54 min, zero failures"],
+  ["184","Funds covered","REITs, BDCs and 10/12(g) funds"],
+  ["98%","Test coverage","56 pytest tests on the EDGAR client"],
+  ["27%","Less manual work","LLM automation at Human Initials"],
+  ["10K","Records analyzed","NCRB crime data pipeline"],
+  ["1K+","Students supported","TPC-RAIT placement data"]
+];
+
+const SKILLS = [
+  ["Languages",["Python","Java","TypeScript","JavaScript","SQL"]],
+  ["Backend",["Spring Boot","MyBatis","Express","Flask","FastAPI","REST"]],
+  ["Cloud & Data",["AWS S3","SQS","Lambda","PostgreSQL","Pandas","NumPy","Power BI"]],
+  ["Security",["AES-GCM","RSA","JWT","RBAC","Row-Level Security"]],
+  ["Frontend",["Vue 3","React","Tailwind CSS"]],
+  ["Tools",["Git","Docker","Bitbucket Pipelines","pytest","moto","ruff","Playwright","Supabase"]]
+];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+document.querySelectorAll("[data-rail]").forEach(rail => {
+  const key = rail.dataset.rail;
+  rail.innerHTML = Object.entries(ITEMS).filter(([,v]) => v.rail === key).map(([id,v]) => `
+    <button class="card" type="button" data-open="${id}" aria-label="${esc(v.title)}: details">
+      <div class="poster" style="background:${GRAD[v.grad]}">
+        <span class="badge">${esc(v.badge)}</span><span class="glyph">${esc(v.glyph)}</span>
+        <span class="t">${esc(v.title)}</span>
+      </div>
+      <div class="info">
+        <div class="sub"><span class="m">${esc(v.match)}</span>${v.sub.map(s=>`<span>${esc(s)}</span>`).join("")}</div>
+        <p>${esc(v.blurb)}</p>
+        <div class="chips">${v.chips.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div>
+      </div>
+    </button>`).join("");
+});
+
+document.getElementById("stats").innerHTML = STATS.map(([n,t,d]) => `
+  <div class="stat"><span class="num">${esc(n)}</span><div class="box"><b>${esc(t)}</b><span>${esc(d)}</span></div></div>`).join("");
+
+document.getElementById("skillrail").innerHTML = SKILLS.map(([h,l]) => `
+  <div class="skill"><h3>${esc(h)}</h3><ul>${l.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>`).join("");
+
+/* arrows for each rail */
+document.querySelectorAll(".rail-wrap").forEach(w => {
+  const rail = w.querySelector(".rail");
+  ["l","r"].forEach(side => {
+    const b = document.createElement("button");
+    b.className = "arrow " + side; b.type = "button";
+    b.setAttribute("aria-label", side === "l" ? "Scroll left" : "Scroll right");
+    b.textContent = side === "l" ? "‹" : "›";
+    b.addEventListener("click", () => rail.scrollBy({left:(side==="l"?-1:1)*rail.clientWidth*0.8,behavior:"smooth"}));
+    w.appendChild(b);
+  });
+});
+
+/* modal */
+const modal = document.getElementById("modal");
+function openItem(id){
+  const v = ITEMS[id]; if(!v) return;
+  document.getElementById("m-hero").style.background = GRAD[v.grad];
+  document.getElementById("m-title").textContent = v.title;
+  document.getElementById("m-meta").innerHTML = `<span class="m">${esc(v.match)}</span>` + v.sub.map(s=>`<span>${esc(s)}</span>`).join("");
+  document.getElementById("m-points").innerHTML = v.points.map(p=>`<li>${esc(p)}</li>`).join("");
+  document.getElementById("m-side").innerHTML =
+    v.side.map(([k,val])=>`<div><b>${esc(k)}:</b> ${esc(val)}</div>`).join("") +
+    `<div><b>Tags:</b> ${v.chips.map(esc).join(", ")}</div>` +
+    (v.link ? `<a class="m-link" href="${v.link}" target="_blank" rel="noopener">View code on GitHub ↗</a>` : "");
+  if (typeof modal.showModal === "function") modal.showModal(); else modal.setAttribute("open","");
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-open]"); if (t) openItem(t.dataset.open);
+});
+document.getElementById("m-close").addEventListener("click", () => modal.close());
+modal.addEventListener("click", e => { if (e.target === modal) modal.close(); });
+
+/* top bar turns solid on scroll */
+const bar = document.getElementById("topbar");
+addEventListener("scroll", () => bar.classList.toggle("solid", scrollY > 40), {passive:true});
+
+/* background filing ticker */
+const forms = ["10-K","10-Q","8-K","10-K/A","N-CSR","10-12G","S-11","424B3"];
+let lines = "";
+for (let i = 0; i < 18; i++) {
+  let l = "";
+  for (let j = 0; j < 9; j++) l += forms[(i*3+j*5)%forms.length].padEnd(9," ") + " ";
+  lines += l + "\n";
+}
+document.getElementById("ticker").textContent = lines;
+</script>
+</body>
+</html>
